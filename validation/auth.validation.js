@@ -1,0 +1,21 @@
+const httpStatus = require("http-status");
+const config = require("../config/config");
+const { AppError } = require("../helpers/utils");
+
+const login = {
+  email: {
+    notEmpty: true,
+    isEmail: true,
+    trim: true,
+  },
+  password: {
+    notEmpty: true,
+    trim: true,
+    //Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
+    matches: "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[a-zA-Zd]{8,}$",
+  },
+};
+
+module.exports = {
+  login,
+};
