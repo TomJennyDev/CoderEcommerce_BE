@@ -1,49 +1,87 @@
 const httpStatus = require("http-status");
 const { sendResponse, catchAsync } = require("../helpers/utils");
+const categoryService = require("../services/category.service");
 
 const categoryController = {};
 
-categoryController.getAllCategorys = catchAsync(async (req, res, next) => {
+categoryController.getAllCategories = catchAsync(async (req, res, next) => {
+  const categories = await categoryService.getAllCatgories(req);
   return sendResponse(
     res,
     httpStatus.OK,
     true,
-    Categorys,
+    categories,
     "",
-    "User is login successfully"
+    "Get Categories successfully"
   );
 });
 
 categoryController.getCategoryById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const category = await categoryService.getCategoryById(id);
+
   return sendResponse(
     res,
     httpStatus.OK,
     true,
-    Category,
+    category,
     "",
-    "User is login successfully"
+    "Get Category successfully"
+  );
+});
+
+categoryController.createCategory = catchAsync(async (req, res, next) => {
+  const category = await categoryService.createCategory(req.body);
+
+  return sendResponse(
+    res,
+    httpStatus.OK,
+    true,
+    category,
+    "",
+    "Create Category successfully"
+  );
+});
+
+categoryController.createSubCategory = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const category = await categoryService.updateCategoryById(id, req.body);
+
+  return sendResponse(
+    res,
+    httpStatus.OK,
+    true,
+    category,
+    "",
+    "Create Category successfully"
   );
 });
 
 categoryController.updateCategoryById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const category = await categoryService.updateCategoryById(id, req.body);
+
   return sendResponse(
     res,
     httpStatus.OK,
     true,
-    Category,
+    category,
     "",
-    "User is login successfully"
+    "Update Category successfully"
   );
 });
 
 categoryController.deleteCategoryById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  await categoryService.deleteCategoryById(id);
+
   return sendResponse(
     res,
     httpStatus.OK,
     true,
     {},
-    "",
-    "User is login successfully"
+    "Delete Category successfully"
   );
 });
 

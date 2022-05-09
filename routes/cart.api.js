@@ -1,64 +1,55 @@
 const express = require("express");
 const { validate } = require("../middlewares/validate");
-const UserCtr = require("../controllers/user.controllers");
+const cartCtr = require("../controllers/cart.controller");
 const { logginRequired } = require("../middlewares/passport");
-const { userVal, tokenVal } = require("../validation");
+const { cartVal, tokenVal } = require("../validation");
 const { isAdmin } = require("../middlewares/authorization");
+const cartItemCtr = require("../controllers/cartItem.controller");
 
 const router = express.Router();
 
-/* GET users listing. */
-//customers
-router.post(
-  "/",
-  validate(userVal.createUser, ["body"]),
-  UserCtr.createUserByEmailPassword
-);
+/* GET carts listing. */
 
 router.get(
   "/me",
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
-  UserCtr.getCurrentUser
+  //   validate(cartVal.getAllcartsPublic, ["body"]),
+  cartCtr.getCartById
+);
+
+router.post(
+  "/me/create",
+  validate(tokenVal.verifyToken, ["headers"]),
+  logginRequired,
+  //   validate(cartVal.getAllcartsPublic, ["body"]),
+  cartCtr.createCart
 );
 
 router.put(
   "/me/update",
   validate(tokenVal.verifyToken, ["headers"]),
-  validate(userVal.updateUser, ["body"]),
   logginRequired,
-  UserCtr.updateCurrentUser
+  //   validate(cartVal.getAllcartsPublic, ["body"]),
+  cartCtr.updateCartById
 );
 
-router.delete(
-  "/me/delete",
-  validate(tokenVal.verifyToken, ["headers"]),
-  logginRequired,
-  UserCtr.deleteCurrentUser
-);
-
-// administrators
-router.post(
-  "/create",
-  validate(userVal.createUserWithAdmin, ["body"]),
-  UserCtr.createUserByEmailPassword
-);
-
+//adminsitrators
 router.get(
   "/",
   validate(tokenVal.verifyToken, ["headers"]),
-  validate(userVal.getUsers, ["headers"]),
   logginRequired,
   isAdmin,
-  UserCtr.getAllUsersList
+  cartCtr.getAllCarts
 );
 
 router.get(
   "/:id",
   validate(tokenVal.verifyToken, ["headers"]),
+  //   validate(cartVal.getcart, ["body"]),
   logginRequired,
   isAdmin,
-  UserCtr.getSingleUserById
+  cartCtr.getCartById
 );
 
 router.put(
@@ -66,8 +57,8 @@ router.put(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,
-  validate(userVal.updateUserWithAdmin, ["body"]),
-  UserCtr.updateUserById
+  //   validate(cartVal.updatecart, ["body"]),
+  cartCtr.updateCartById
 );
 
 router.delete(
@@ -75,7 +66,7 @@ router.delete(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,
-  UserCtr.deleteUserById
+  cartCtr.deleteCartById
 );
 
 module.exports = router;

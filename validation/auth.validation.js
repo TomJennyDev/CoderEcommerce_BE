@@ -16,6 +16,15 @@ const login = {
   },
 };
 
+const resetPassword = {
+  email: {
+    notEmpty: true,
+    isEmail: true,
+    trim: true,
+  },
+};
+
 module.exports = {
   login,
+  resetPassword,
 };

@@ -1,20 +1,21 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
-const config = require("../config/config");
+const toJSON = require("./plugin/toJSON.plugin");
 
 const cartItemSchema = Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "Users" },
-    productId: { type: Schema.Types.ObjectId, ref: "Products" },
-    isDeleted: { type: Boolean, default: false },
+    cartId: { type: Schema.Types.ObjectId, required: true, ref: "Carts" },
+    productId: { type: Schema.Types.ObjectId, required: true, ref: "Products" },
+    quantity: { type: Number, min: 1 },
   },
   {
     timestamps: true, //CreatedAt & UpdatedAt
   }
 );
-
+cartItemSchema.plugin(toJSON);
 cartItemSchema.plugin(paginate);
 
-const cartItem = mongoose.model("cartItems", cartItemSchema);
-module.exports = cartItem;
+cartItemSchema.index({ cartId: 1, productId: 1 }, { unique: true });
+const CartItem = mongoose.model("CartItems", cartItemSchema);
+module.exports = CartItem;

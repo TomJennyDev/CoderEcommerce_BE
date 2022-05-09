@@ -1,17 +1,104 @@
 const httpStatus = require("http-status");
 const { AppError, catchAsync } = require("../helpers/utils");
+const Description = require("../models/Description");
+const Product = require("../models/Product");
 
 const productService = {};
 
-productService.checkExistProduct = catchAsync(async function (ProductId) {
-  const Product = Product.findById(ProductId);
-  return !!Product;
-});
+productService.checkExistProduct = async function (ProductId) {
+  const product = await Product.findById(ProductId);
+  console.log(product);
+  return !!product;
+};
 
-productService.createProduct = catchAsync(async function (Product) {
-  const Product = Product.create(Product);
+productService.getAllProducts = async function (query) {
+  query.populate = "descriptions";
 
-  return user;
-});
+  if (query.price_max && query.price_min) {
+    query.price = {
+      $lte: query.price_max || 10000000000,
+      $gte: query.price_min || 0,
+    };
+    delete query.price_max;
+    delete query.price_min;
+  }
+
+  // query.categories =
+
+  const products = await Product.paginate(query);
+
+  return products;
+};
+
+productService.getProductById = async function (productId) {
+  const product = await Product.findById(productId).populate("descriptions");
+
+  if (!productId) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Product is not found",
+      "Get single product"
+    );
+  }
+  return product;
+};
+
+productService.createProduct = async function (productBody) {
+  const { descriptions, ...restProductBody } = productBody;
+  if (descriptions) {
+    const description = await Description.create({ content: descriptions });
+    restProductBody.descriptions = description._id;
+  }
+  const product = await Product.create(restProductBody);
+
+  return product;
+};
+
+productService.updateProductById = async function (productId, productBody) {
+  let product = await Product.findById(productId);
+
+  if (!product) {
+    throw new AppError(404, "Product Not Found", "Update product");
+  }
+
+  const { descriptions, ...restProductBody } = productBody;
+  if (descriptions && product.descriptions) {
+    const description = await Description.findById(product.descriptions);
+    if (!description) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "Descriptions is not found",
+        "Update description of Product"
+      );
+    }
+    description.content = descriptions;
+    description.save();
+  }
+
+  Object.keys(restProductBody).forEach((field) => {
+    if (restProductBody[field] !== undefined) {
+      product[field] = restProductBody[field];
+    }
+  });
+
+  await product.save();
+
+  return product;
+};
+
+productService.deleteProductById = async function (productId) {
+  const product = await Product.findByIdAndUpdate(productId, {
+    isDeleted: true,
+  });
+
+  if (!product) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Product is not found",
+      "Delete single product"
+    );
+  }
+  return product;
+};
 
 module.exports = productService;

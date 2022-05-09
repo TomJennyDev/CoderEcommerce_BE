@@ -2,32 +2,32 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
 const config = require("../config/config");
+const toJSON = require("./plugin/toJSON.plugin");
 
 const reviewSchema = Schema(
   {
-    userId: {
-      type: Schema.ObjectId,
-      required: true,
-      ref: "User",
-    },
-    productId: {
-      type: Schema.ObjectId,
-      required: true,
-      ref: "Product",
-    },
-    comment: { type: String, required: true },
-    isPurchased: { type: Boolean },
-    postedAt: { type: Date, required: true },
-    isHidden: { type: Boolean, default: false },
-    isDeleted: { type: Boolean, default: false },
+    comments: { type: String, required: true },
+    image: { type: String },
+    isPurchased: { type: Boolean, default: false },
     totalRatings: { type: Number, default: 0 },
     rateAverage: { type: Number, default: 0 },
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Users",
+    },
+    productId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Products",
+    },
+    isDeleted: { type: Boolean, default: false },
   },
   {
-    timestamps: true, //CreatedAt & UpdatedAt
+    timestamps: true,
   }
 );
-
+reviewSchema.plugin(toJSON);
 reviewSchema.plugin(paginate);
 
 const Review = mongoose.model("Reviews", reviewSchema);

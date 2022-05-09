@@ -20,6 +20,7 @@ userController.getCurrentUser = catchAsync(async (req, res) => {
 
 userController.createUserByEmailPassword = catchAsync(
   async (req, res, next) => {
+    console.log(req.body);
     let user = await userService.createUser(req.body);
 
     const token = user.generateToken();
@@ -91,18 +92,6 @@ userController.getAllUsersList = catchAsync(async (req, res) => {
     users,
     null,
     "Get User List successfully"
-  );
-});
-
-userController.createUser = catchAsync(async (req, res, next) => {
-  const user = await userService.createUser(req.body);
-  return sendResponse(
-    res,
-    httpStatus.OK,
-    true,
-    user,
-    null,
-    "User is register successfully"
   );
 });
 

@@ -3,17 +3,19 @@ const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
 const config = require("../config/config");
 
-const AttributeSchema = Schema(
+const attributeSchema = Schema(
   {
     title: { type: String, required: true },
-    metaTile: { type: String },
+    parent: { type: String, ref: "Attributes" },
+    ancestors: [{ type: String, ref: "Attributes" }],
+    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true, //CreatedAt & UpdatedAt
   }
 );
 
-AttributeSchema.plugin(paginate);
+attributeSchema.plugin(paginate);
 
-const Attributes = mongoose.model("Attributes", AttributeSchema);
+const Attributes = mongoose.model("Attributes", attributeSchema);
 module.exports = Attributes;

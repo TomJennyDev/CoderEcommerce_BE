@@ -19,6 +19,7 @@ const config = {
       },
     },
     from: env.EMAIL_FROM,
+    to: env.EMAIL_TO,
   },
   jwt: {
     secret: env.JWT_SECRET_KEY,

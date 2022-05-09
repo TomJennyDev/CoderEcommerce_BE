@@ -1,6 +1,6 @@
 const httpStatus = require("http-status");
 const mongoose = require("mongoose");
-const { AppError } = require("../helpers/utils");
+const { AppError, catchAsync } = require("../helpers/utils");
 const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
 
@@ -28,36 +28,32 @@ const reactionSchema = Schema(
 
 reactionSchema.plugin(paginate);
 
-reactionSchema.statics.calTotalRating = async function (targetId) {
-  try {
-    targetId = mongoose.Types.ObjectId(targetId);
+reactionSchema.statics.calTotalRating = catchAsync(async function (targetId) {
+  targetId = mongoose.Types.ObjectId(targetId);
 
-    const totalRating = await this.aggregate([
-      {
-        $match: {
-          targetId: targetId,
-        },
+  const totalRating = await this.aggregate([
+    {
+      $match: {
+        targetId: targetId,
       },
-      {
-        $group: {
-          _id: "$targetId",
-          totalRatings: { $sum: 1 },
-          rateAverage: { $avg: "$rate" },
-        },
+    },
+    {
+      $group: {
+        _id: "$targetId",
+        totalRatings: { $sum: 1 },
+        rateAverage: { $avg: "$rate" },
       },
-      {
-        $project: {
-          totalRatings: 1,
-          rateAverage: { $round: ["$rateAverage", 1] },
-        },
+    },
+    {
+      $project: {
+        totalRatings: 1,
+        rateAverage: { $round: ["$rateAverage", 1] },
       },
-    ]);
+    },
+  ]);
 
-    return totalRating;
-  } catch (error) {
-    throw error;
-  }
-};
+  return totalRating;
+});
 
 const Reaction = mongoose.model("Reactions", reactionSchema);
 module.exports = Reaction;

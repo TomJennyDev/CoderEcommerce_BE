@@ -11,14 +11,12 @@ const router = express.Router();
 
 router.get(
   "/public",
-  logginRequired,
   //   validate(productVal.getAllProductsPublic, ["body"]),
   productCtr.getAllProducts
 );
 
 router.get(
   "/public/:id",
-  logginRequired,
   //   validate(productVal.getAllProductsPublic, ["body"]),
   productCtr.getProductById
 );

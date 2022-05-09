@@ -7,9 +7,6 @@ const toJSON = (schema) => {
     delete obj.__v;
     delete obj.createdAt;
     delete obj.updatedAt;
-    obj.id = obj._id;
-    delete obj._id;
-
     return obj;
   };
 };

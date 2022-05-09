@@ -7,11 +7,11 @@ const TagSchema = Schema(
     title: { type: String },
     metaTitle: { type: String },
     slug: { type: String },
-    isHidden: { type: Boolean, default: false },
+    content: { type: String },
     isDeleted: { type: Boolean, default: false },
   },
   {
-    timestamps: true, //CreatedAt & UpdatedAt
+    timestamps: true,
   }
 );
 

@@ -1,64 +1,64 @@
 const express = require("express");
 const { validate } = require("../middlewares/validate");
-const UserCtr = require("../controllers/user.controllers");
+const orderCtr = require("../controllers/order.controller");
 const { logginRequired } = require("../middlewares/passport");
-const { userVal, tokenVal } = require("../validation");
+const { orderVal, tokenVal } = require("../validation");
 const { isAdmin } = require("../middlewares/authorization");
 
 const router = express.Router();
 
-/* GET users listing. */
-//customers
-router.post(
-  "/",
-  validate(userVal.createUser, ["body"]),
-  UserCtr.createUserByEmailPassword
-);
+/* GET orders listing. */
 
 router.get(
   "/me",
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
-  UserCtr.getCurrentUser
-);
-
-router.put(
-  "/me/update",
-  validate(tokenVal.verifyToken, ["headers"]),
-  validate(userVal.updateUser, ["body"]),
-  logginRequired,
-  UserCtr.updateCurrentUser
-);
-
-router.delete(
-  "/me/delete",
-  validate(tokenVal.verifyToken, ["headers"]),
-  logginRequired,
-  UserCtr.deleteCurrentUser
-);
-
-// administrators
-router.post(
-  "/create",
-  validate(userVal.createUserWithAdmin, ["body"]),
-  UserCtr.createUserByEmailPassword
+  //   validate(orderVal.getAllordersPublic, ["body"]),
+  orderCtr.getAllOrders
 );
 
 router.get(
+  "/me/:id",
+  validate(tokenVal.verifyToken, ["headers"]),
+  logginRequired,
+  //   validate(orderVal.getAllordersPublic, ["body"]),
+  orderCtr.getOrderById
+);
+
+//adminsitrators
+router.get(
   "/",
   validate(tokenVal.verifyToken, ["headers"]),
-  validate(userVal.getUsers, ["headers"]),
   logginRequired,
   isAdmin,
-  UserCtr.getAllUsersList
+  orderCtr.getAllCategories
 );
 
 router.get(
   "/:id",
   validate(tokenVal.verifyToken, ["headers"]),
+  //   validate(orderVal.getorder, ["body"]),
   logginRequired,
   isAdmin,
-  UserCtr.getSingleUserById
+  orderCtr.getOrderById
+);
+
+router.post(
+  "/create",
+  validate(tokenVal.verifyToken, ["headers"]),
+  //   validate(orderVal.createorder, ["body"]),
+  logginRequired,
+  isAdmin,
+  orderCtr.createOrder
+);
+
+router.put(
+  "/createsub/:id",
+  validate(tokenVal.verifyToken, ["headers"]),
+  logginRequired,
+  isAdmin,
+  //   validate(orderVal.updateorder, ["body"]),
+  orderCtr.createSubOrder
 );
 
 router.put(
@@ -66,8 +66,8 @@ router.put(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,
-  validate(userVal.updateUserWithAdmin, ["body"]),
-  UserCtr.updateUserById
+  //   validate(orderVal.updateorder, ["body"]),
+  orderCtr.updateOrderById
 );
 
 router.delete(
@@ -75,7 +75,7 @@ router.delete(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,
-  UserCtr.deleteUserById
+  orderCtr.deleteOrderById
 );
 
 module.exports = router;

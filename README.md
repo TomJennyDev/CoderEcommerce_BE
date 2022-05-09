@@ -28,7 +28,7 @@ This include all common features of a Social Platform.
 ### CRUD product and manage product (ProductFlow)
 
 1. User and Admin can see list of product at home page.
-2. User can filter product by (search by name, catgory, keywords).
+2. User can filter product by (search by name, category, keywords).
 3. User can see detail information of single product.
 4. Admin can add a product.
 5. Admin can add discription(HTML/CSS) for product.

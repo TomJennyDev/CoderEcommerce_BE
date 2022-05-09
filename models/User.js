@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const paginate = require("./plugin/paginate.plugin");
 const config = require("../config/config");
 const toJSON = require("./plugin/toJSON.plugin");
+const creditCartSchema = require("./CreditCard");
 
 const userSchema = Schema(
   {
@@ -34,6 +35,9 @@ const userSchema = Schema(
       unique: true,
       sparse: true,
     },
+    creditCards: [creditCartSchema],
+
+    isResetPassword: { type: Boolean, default: false },
   },
   {
     timestamps: true, //CreatedAt & UpdatedAt
@@ -69,8 +73,6 @@ userSchema.methods.generateToken = function () {
 userSchema.methods.filterOutputUser = function () {
   const obj = this._doc;
 
-  obj.id = obj._id;
-  delete obj._id;
   delete obj.__v;
   delete obj.password;
   delete obj.isDeleted;

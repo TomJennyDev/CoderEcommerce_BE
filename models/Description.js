@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
 const config = require("../config/config");
+const toJSON = require("./plugin/toJSON.plugin");
 
-const DescriptionSchema = Schema(
+const descriptionSchema = Schema(
   {
     content: { type: String },
     isDeleted: { type: Boolean, default: false },
@@ -12,8 +13,8 @@ const DescriptionSchema = Schema(
     timestamps: true, //CreatedAt & UpdatedAt
   }
 );
+descriptionSchema.plugin(toJSON);
+descriptionSchema.plugin(paginate);
 
-DescriptionSchema.plugin(paginate);
-
-const Description = mongoose.model("Descriptions", DescriptionSchema);
+const Description = mongoose.model("Descriptions", descriptionSchema);
 module.exports = Description;

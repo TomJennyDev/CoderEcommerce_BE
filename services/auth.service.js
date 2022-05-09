@@ -8,10 +8,7 @@ const userService = require("./user.service");
 
 const authService = {};
 
-authService.loginUserWithEmailPassword = catchAsync(async function (
-  email,
-  password
-) {
+authService.loginUserWithEmailPassword = async function (email, password) {
   const filter = { email };
   const options = ["+password", "+role"];
   const user = await userService.getUserByFilter(filter, options);
@@ -22,7 +19,9 @@ authService.loginUserWithEmailPassword = catchAsync(async function (
       "Incorrect email or password",
       "Authentication error"
     );
-  } else if (!user) {
+  }
+
+  if (!user) {
     throw new AppError(
       httpStatus.UNAUTHORIZED,
       "Email is not exist, please register",
@@ -34,9 +33,9 @@ authService.loginUserWithEmailPassword = catchAsync(async function (
   user._doc.accessToken = token;
 
   return user;
-});
+};
 
-authService.loginUserWithSocial = catchAsync(async function (socialUser) {
+authService.loginUserWithSocial = async function (socialUser) {
   const { id, displayName, emails, photos, provider } = socialUser;
 
   filter = { email: emails[0].value };
@@ -63,6 +62,6 @@ authService.loginUserWithSocial = catchAsync(async function (socialUser) {
   user._doc.accessToken = token;
 
   return user;
-});
+};
 
 module.exports = authService;

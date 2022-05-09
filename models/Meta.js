@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
 const config = require("../config/config");
 
-const MetaSchema = Schema(
+const metaSchema = Schema(
   {
     key: { type: String, require: true, unique: true },
     content: { type: String, require: true },
@@ -12,7 +12,6 @@ const MetaSchema = Schema(
       required: true,
       ref: "Products",
     },
-    isHidden: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
   },
   {
@@ -20,7 +19,7 @@ const MetaSchema = Schema(
   }
 );
 
-MetaSchema.plugin(paginate);
+metaSchema.plugin(paginate);
 
-const Meta = mongoose.model("Metas", MetaSchema);
+const Meta = mongoose.model("Metas", metaSchema);
 module.exports = Meta;

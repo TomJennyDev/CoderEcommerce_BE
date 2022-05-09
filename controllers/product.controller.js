@@ -1,12 +1,12 @@
 const httpStatus = require("http-status");
 const { sendResponse, catchAsync } = require("../helpers/utils");
 const Product = require("../models/Product");
+const productService = require("../services/product.service");
 
 const productController = {};
 
 productController.getAllProducts = catchAsync(async (req, res, next) => {
-  const products = Product.paginate().populate("Descriptions");
-
+  const products = await productService.getAllProducts(req.query);
   return sendResponse(
     res,
     httpStatus.OK,
@@ -18,6 +18,8 @@ productController.getAllProducts = catchAsync(async (req, res, next) => {
 });
 
 productController.getProductById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const product = await productService.getProductById(id);
   return sendResponse(
     res,
     httpStatus.OK,
@@ -29,6 +31,7 @@ productController.getProductById = catchAsync(async (req, res, next) => {
 });
 
 productController.createProduct = catchAsync(async (req, res, next) => {
+  const product = await productService.createProduct(req.body);
   return sendResponse(
     res,
     httpStatus.OK,
@@ -40,6 +43,9 @@ productController.createProduct = catchAsync(async (req, res, next) => {
 });
 
 productController.updateProductById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const product = await productService.updateProductById(id, req.body);
+
   return sendResponse(
     res,
     httpStatus.OK,
@@ -51,6 +57,9 @@ productController.updateProductById = catchAsync(async (req, res, next) => {
 });
 
 productController.deleteProductById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  await productService.deleteProductById(id);
+
   return sendResponse(
     res,
     httpStatus.OK,

@@ -1,9 +1,7 @@
 const paginate = (schema) => {
   schema.statics.paginate = async function (query) {
-    let { limit, page, sortBy, ...filter } = query;
-
+    let { limit, page, sortBy, populate, select, ...filter } = query;
     let sort = "";
-
     if (sortBy) {
       const sortingCriteria = [];
 
@@ -23,13 +21,19 @@ const paginate = (schema) => {
 
     const countPromise = this.countDocuments(filter).exec();
 
-    let docsPromise = this.find(filter)
-      .select(["+"])
-      .sort(sort)
-      .skip(skip)
-      .limit(limit);
+    let docsPromise = this.find(filter).sort(sort).skip(skip).limit(limit);
 
-    docsPromise = docsPromise.exec();
+    if (populate) {
+      populate.split(",").forEach((populateOption) => {
+        docsPromise = docsPromise.populate(
+          populateOption.split(".").reduce((a, b) => {
+            return { path: b, populate: a };
+          })
+        );
+      });
+    }
+
+    docsPromise = docsPromise.select(select).exec();
 
     return Promise.all([countPromise, docsPromise]).then((values) => {
       const [totalResults, results] = values;
