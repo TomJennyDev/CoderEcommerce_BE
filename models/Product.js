@@ -12,8 +12,7 @@ const productSchema = Schema(
     sku: { type: String },
     title: { type: String, require: true },
     metaTitle: { type: String },
-    content: { type: String },
-    slug: { type: String, slug: ["title", "_id"] },
+    slug: { type: String, slug: ["_id", "title"] },
     imageUrls: [{ type: String }],
     status: {
       type: String,
@@ -32,8 +31,8 @@ const productSchema = Schema(
       ref: "Descriptions",
       default: null,
     },
-    categories: [{ type: Schema.Types.ObjectId, ref: "Categories" }],
-    attributes: [{ type: Schema.Types.ObjectId, ref: "Attributes" }],
+    categoryId: { type: Schema.Types.ObjectId, ref: "Categories" },
+    attributeId: [{ type: Schema.Types.ObjectId, ref: "Attributes" }],
     isDeleted: { type: Boolean, default: false },
   },
   {

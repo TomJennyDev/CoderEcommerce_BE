@@ -12,12 +12,11 @@ const product = {
       options: ["sale", "new"],
     },
   },
-  inventoryStatus: { ty },
   price: { isInt: true, toInt: true, require: true },
   priceSale: { isInt: true, toInt: true },
   quantity: { isString: true, require: true },
   isHidden: { isBoolean: true, optional: true },
-  descriptionId: {},
+  descriptionId: { Schema },
 };
 
 const getAllProducts = {};

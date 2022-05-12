@@ -1,25 +1,28 @@
 const express = require("express");
 const { validate } = require("../middlewares/validate");
-const categoryCtr = require("../controllers/category.controller");
+const wishlistCtr = require("../controllers/wishlist.controller");
 const { logginRequired } = require("../middlewares/passport");
-const { categoryVal, tokenVal } = require("../validation");
+const { wishlistVal, tokenVal } = require("../validation");
 const { isAdmin } = require("../middlewares/authorization");
 
 const router = express.Router();
 
-/* GET categorys listing. */
+/* GET wishlists listing. */
 
 router.get(
-  "/public",
-  //   validate(categoryVal.getAllcategorysPublic, ["body"]),
-  categoryCtr.getAllCategories
+  "/me",
+  validate(tokenVal.verifyToken, ["headers"]),
+  logginRequired,
+  //   validate(wishlistVal.getAllwishlistsPublic, ["body"]),
+  wishlistCtr.getWishlistById
 );
 
 router.get(
-  "/public/:id",
-
-  //   validate(categoryVal.getAllcategorysPublic, ["body"]),
-  categoryCtr.getCategoryById
+  "/me/update",
+  validate(tokenVal.verifyToken, ["headers"]),
+  logginRequired,
+  //   validate(wishlistVal.getAllwishlistsPublic, ["body"]),
+  wishlistCtr.updateWishlistById
 );
 
 //adminsitrators
@@ -28,25 +31,25 @@ router.get(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,
-  categoryCtr.getAllCategories
+  wishlistCtr.getAllCategories
 );
 
 router.get(
   "/:id",
   validate(tokenVal.verifyToken, ["headers"]),
-  //   validate(categoryVal.getcategory, ["body"]),
+  //   validate(wishlistVal.getwishlist, ["body"]),
   logginRequired,
   isAdmin,
-  categoryCtr.getCategoryById
+  wishlistCtr.getWishlistById
 );
 
 router.post(
   "/create",
   validate(tokenVal.verifyToken, ["headers"]),
-  //   validate(categoryVal.createcategory, ["body"]),
+  //   validate(wishlistVal.createwishlist, ["body"]),
   logginRequired,
   isAdmin,
-  categoryCtr.createCategory
+  wishlistCtr.createWishlist
 );
 
 router.put(
@@ -54,8 +57,8 @@ router.put(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,
-  //   validate(categoryVal.updatecategory, ["body"]),
-  categoryCtr.createSubCategory
+  //   validate(wishlistVal.updatewishlist, ["body"]),
+  wishlistCtr.createSubWishlist
 );
 
 router.put(
@@ -63,8 +66,8 @@ router.put(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,
-  //   validate(categoryVal.updatecategory, ["body"]),
-  categoryCtr.updateCategoryById
+  //   validate(wishlistVal.updatewishlist, ["body"]),
+  wishlistCtr.updateWishlistById
 );
 
 router.delete(
@@ -72,7 +75,7 @@ router.delete(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,
-  categoryCtr.deleteCategoryById
+  wishlistCtr.deleteWishlistById
 );
 
 module.exports = router;

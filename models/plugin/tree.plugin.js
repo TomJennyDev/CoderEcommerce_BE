@@ -2,14 +2,7 @@ const tree = (schema) => {
   // Get all category
   schema.statics.getAllCategory = async function () {
     try {
-      const categories = await this.find({
-        $or: [
-          { _id: "62787ed42be5911f1bb9e08c" },
-          { parent: "62787ed42be5911f1bb9e08c" },
-        ],
-        idDeleted: false,
-      });
-      console.log(categories);
+      const categories = await this.find({ idDeleted: false });
       if (!categories) return [];
       return nestedCategories(categories);
     } catch (err) {
@@ -23,7 +16,7 @@ const tree = (schema) => {
         $or: [{ _id }, { parent: _id }],
         idDeleted: false,
       });
-      console.log(categories);
+
       if (!categories) return [];
       return nestedCategories(categories);
     } catch (err) {
@@ -45,7 +38,8 @@ const tree = (schema) => {
     for (let cate of category) {
       categoryList.push({
         _id: cate._id,
-        name: cate.name,
+        title: cate.title,
+        icon: cate.icon,
         slug: cate.slug,
         children: nestedCategories(categories, cate._id),
       });

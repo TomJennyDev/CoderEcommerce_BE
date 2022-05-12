@@ -5,7 +5,6 @@ const paginate = require("./plugin/paginate.plugin");
 const TagSchema = Schema(
   {
     title: { type: String },
-    metaTitle: { type: String },
     slug: { type: String },
     content: { type: String },
     isDeleted: { type: Boolean, default: false },

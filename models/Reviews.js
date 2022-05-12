@@ -27,7 +27,7 @@ const reviewSchema = Schema(
     timestamps: true,
   }
 );
-reviewSchema.plugin(toJSON);
+
 reviewSchema.plugin(paginate);
 
 const Review = mongoose.model("Reviews", reviewSchema);

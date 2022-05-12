@@ -7,23 +7,29 @@ const productService = {};
 
 productService.checkExistProduct = async function (ProductId) {
   const product = await Product.findById(ProductId);
-  console.log(product);
+
   return !!product;
 };
 
 productService.getAllProducts = async function (query) {
   query.populate = "descriptions";
+  query.sort;
+
+  if (query.rating) {
+    query.rateAverage = {
+      $gte: parseInt(query.rating),
+    };
+  }
+  console.log(query);
 
   if (query.price_max && query.price_min) {
     query.price = {
-      $lte: query.price_max || 10000000000,
-      $gte: query.price_min || 0,
+      $lte: parseInt(query.price_max) || 1000000000,
+      $gte: parseInt(query.price_min) || 0,
     };
     delete query.price_max;
     delete query.price_min;
   }
-
-  // query.categories =
 
   const products = await Product.paginate(query);
 
@@ -33,7 +39,7 @@ productService.getAllProducts = async function (query) {
 productService.getProductById = async function (productId) {
   const product = await Product.findById(productId).populate("descriptions");
 
-  if (!productId) {
+  if (!product) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "Product is not found",

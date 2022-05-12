@@ -9,6 +9,7 @@ const categorySchema = Schema(
   {
     title: { type: String },
     slug: { type: String, slug: ["title"] },
+    icon: { type: String },
     parent: {
       type: Schema.Types.ObjectId,
       ref: "Categories",

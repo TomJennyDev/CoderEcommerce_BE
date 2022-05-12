@@ -3,7 +3,7 @@ const CartItem = require("./CartItem");
 const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
 const toJSON = require("./plugin/toJSON.plugin");
-const shippingSchema = require("./shipping");
+const shippingSchema = require("./Shipping");
 
 const cartSchema = Schema(
   {
@@ -25,7 +25,6 @@ const cartSchema = Schema(
     timestamps: true, //CreatedAt & UpdatedAt
   }
 );
-cartSchema.plugin(toJSON);
 
 cartSchema.plugin(paginate);
 

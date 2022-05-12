@@ -1,6 +1,8 @@
 const paginate = (schema) => {
   schema.statics.paginate = async function (query) {
     let { limit, page, sortBy, populate, select, ...filter } = query;
+    console.log(filter);
+
     let sort = "";
     if (sortBy) {
       const sortingCriteria = [];
@@ -15,7 +17,7 @@ const paginate = (schema) => {
       sort = "createdAt";
     }
 
-    limit = limit && parseInt(limit, 10) > 0 ? parseInt(limit, 10) : 10;
+    limit = limit && parseInt(limit, 10) > 0 ? parseInt(limit, 10) : 9;
     page = page && parseInt(page, 10) > 0 ? parseInt(page, 10) : 1;
     skip = (page - 1) * limit;
 

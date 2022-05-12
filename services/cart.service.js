@@ -43,7 +43,10 @@ cartService.getCartById = async function (userId, cartId, role) {
 };
 
 cartService.createCart = async function (userId) {
-  let cart = await Cart.find({ userId });
+  console.log(userId);
+
+  let cart = await Cart.findOne({ userId });
+  console.log(cart);
   if (cart) {
     throw new AppError(404, "Cart is Exists", "Create cart");
   }

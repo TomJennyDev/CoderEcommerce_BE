@@ -7,7 +7,6 @@ const attributeSchema = Schema(
   {
     title: { type: String, required: true },
     parent: { type: String, ref: "Attributes" },
-    ancestors: [{ type: String, ref: "Attributes" }],
     isDeleted: { type: Boolean, default: false },
   },
   {

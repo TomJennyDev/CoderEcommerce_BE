@@ -36,7 +36,7 @@ const userSchema = Schema(
       sparse: true,
     },
     creditCards: [creditCartSchema],
-
+    cartId: { type: Schema.Types.ObjectId, ref: "Carts" },
     isResetPassword: { type: Boolean, default: false },
   },
   {

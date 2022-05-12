@@ -52,7 +52,14 @@ userService.createUser = async function (userBody) {
       "Create new User"
     );
   }
-  const user = new User({ ...userBody }).save();
+
+  const user = await new User({ ...userBody }).save();
+
+  const cart = await cartService.createCart(user._id);
+
+  user.cartId = cart._id;
+
+  await user.save();
 
   return user;
 };
