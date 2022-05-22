@@ -1,5 +1,6 @@
 const httpStatus = require("http-status");
 const { AppError, catchAsync } = require("../helpers/utils");
+const Product = require("../models/Product");
 const Wishlist = require("../models/Wishlist");
 
 const wishlistService = {};
@@ -15,8 +16,9 @@ wishlistService.getAllWishlists = async function (query) {
   return wishlists;
 };
 
-wishlistService.getWishlistProductByUserId = async function (wishlistId) {
-  const wishlist = await Wishlist.findById(wishlistId);
+wishlistService.getWishlistByUserId = async function (wishlistId) {
+  u;
+  const wishlist = await Product.paginate(wishlistId);
 
   if (!wishlistId) {
     throw new AppError(

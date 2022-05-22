@@ -143,16 +143,15 @@ const productService = require("./services/product.service");
 //   { title: "huawei" },
 //   { title: "huawei" },
 // ];
+// (async () => await Product.deleteMany({}))();
 
-let data = fs.readFileSync("./final/smartphone.json", "utf8");
-res = JSON.parse(data);
-// console.log(res);
+// let data = fs.readFileSync("./final/smartwatch.json", "utf8");
+// res = JSON.parse(data);
+// // console.log(res);
 // (async () => await productService.createProduct(res[0]))();
 
-res.forEach(async (item) => {
-  await productService.createProduct(item);
-  // console.log(item.images.length === 0 ? item.variants[0] : []);
-  // result.push(product);
-});
-
-// (async () => await Product.deleteMany({}))();
+// res.forEach(async (item) => {
+//   await productService.createProduct(item);
+// console.log(item.images.length === 0 ? item.variants[0] : []);
+// result.push(product);
+// });

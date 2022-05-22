@@ -1,7 +1,6 @@
 const paginate = (schema) => {
   schema.statics.paginate = async function (query) {
     let { limit, page, sortBy, populate, select, ...filter } = query;
-    console.log(filter);
 
     let sort = "";
     if (sortBy) {

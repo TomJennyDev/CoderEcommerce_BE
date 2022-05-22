@@ -21,13 +21,13 @@ cartItemController.addCartItem = catchAsync(async (req, res, next) => {
 
 cartItemController.updateCartItem = catchAsync(async (req, res, next) => {
   const { id: userId } = req.user;
-  await cartItemService.updateCartItem(userId, req.body);
+  const totalItem = await cartItemService.updateCartItem(userId, req.body);
 
   return sendResponse(
     res,
     httpStatus.OK,
     true,
-    {},
+    totalItem,
     "",
     "Update Cart item  successfully"
   );
@@ -36,13 +36,13 @@ cartItemController.updateCartItem = catchAsync(async (req, res, next) => {
 cartItemController.deleteCartItem = catchAsync(async (req, res, next) => {
   const { id: userId } = req.user;
 
-  await cartItemService.deleteCartItem(userId, req.body);
+  const totalItem = await cartItemService.deleteCartItem(userId, req.body);
 
   return sendResponse(
     res,
     httpStatus.OK,
     true,
-    {},
+    totalItem,
     "",
     "Delete Cart successfully"
   );

@@ -4,6 +4,7 @@ const {
   generateRandomHexString,
   catchAsync,
 } = require("../helpers/utils");
+const cartService = require("./cart.service");
 const userService = require("./user.service");
 
 const authService = {};
@@ -30,9 +31,8 @@ authService.loginUserWithEmailPassword = async function (email, password) {
   }
 
   const token = await user.generateToken();
-  user._doc.accessToken = token;
 
-  return user;
+  return { user, accessToken: token };
 };
 
 authService.loginUserWithSocial = async function (socialUser) {
@@ -52,16 +52,15 @@ authService.loginUserWithSocial = async function (socialUser) {
       email: emails[0].value,
       isEmailVerified: true,
       password: generateRandomHexString(8),
-      avatar: photos[0].value,
+      avatarUrl: photos[0].value,
     };
 
     user = await userService.createUser(newUser);
   }
 
   const token = await user.generateToken();
-  user._doc.accessToken = token;
 
-  return user;
+  return { user, accessToken: token };
 };
 
 module.exports = authService;

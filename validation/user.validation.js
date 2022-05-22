@@ -37,13 +37,11 @@ const createUser = {
 const getUsers = {
   limit: {
     optional: true,
-    isInt: true,
     toInt: true,
     trim: true,
   },
   page: {
     optional: true,
-    isInt: true,
     toInt: true,
     trim: true,
   },

@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const CartItem = require("./CartItem");
+const creditCartSchema = require("./CreditCard");
+const paymentSchema = require("./Payment");
 const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
 const toJSON = require("./plugin/toJSON.plugin");
@@ -14,11 +16,13 @@ const cartSchema = Schema(
       ref: "Users",
     },
     shipping: shippingSchema,
+    payment: paymentSchema,
     status: {
       type: String,
-      enum: ["detail", "shipping", "payment", "review"],
-      default: "detail",
+      enum: ["Cart", "Delivery", "Payment", "Summary"],
+      default: "Cart",
     },
+    totalItem: { type: Number, default: 0 },
     isDeleted: { type: Boolean, default: false },
   },
   {

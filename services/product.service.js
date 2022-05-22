@@ -11,16 +11,39 @@ productService.checkExistProduct = async function (ProductId) {
   return !!product;
 };
 
-productService.getAllProducts = async function (query) {
+productService.getAllProducts = async function (query, user) {
   query.populate = "descriptions";
-  query.sort;
+
+  if (user?.role !== "admin") {
+    query.isDeleted = false;
+  }
+  if (query.title) {
+    query.title = { $regex: query.title, $options: "i" };
+  } else {
+    delete query.title;
+  }
+
+  if (user?.role === "admin") {
+    query.populate = "categoryId";
+  }
+
+  const sortBy = query.sortBy && query.sortBy.toLowerCase();
+
+  if (sortBy === "new") {
+    query.status = "new";
+    query.sortBy = query.sortBy + ",updatedAt.desc";
+  }
+
+  if (sortBy?.includes("discount")) {
+    query.status = "sale";
+  }
 
   if (query.rating) {
     query.rateAverage = {
       $gte: parseInt(query.rating),
+      $lte: 5,
     };
   }
-  console.log(query);
 
   if (query.price_max && query.price_min) {
     query.price = {

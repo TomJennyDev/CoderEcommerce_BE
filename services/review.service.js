@@ -38,6 +38,7 @@ reviewService.createReview = async function (
   reviewBody,
   role
 ) {
+  productId = Types.ObjectId(productId);
   if (await !productService.checkExistProduct(productId)) {
     throw new AppError(404, "Product Id is not Exist", "Create review");
   }

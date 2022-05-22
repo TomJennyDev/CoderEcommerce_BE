@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 const creditCartSchema = Schema(
   {
-    cardNumber: { type: Number, required: true, min: 13, max: 19 },
-    expMonth: { type: Date, required: true, min: 1, max: 12 },
-    expYear: { type: Date, required: true },
-    cardCVV: { type: String, required: true, max: 3 },
+    cardHolder: { type: String, required: true },
+    cardNumber: { type: String, required: true },
+    expDate: { type: String, required: true },
+    cardCVV: { type: String, required: true },
     cardIssuer: { type: String, required: true },
   },
   {

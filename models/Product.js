@@ -3,8 +3,6 @@ const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
 const autoPopulate = require("mongoose-autopopulate");
 const toJSON = require("./plugin/toJSON.plugin");
-const Category = require("./Category");
-const Attributes = require("./Attributes");
 const slug = require("mongoose-slug-updater");
 
 const productSchema = Schema(
@@ -20,6 +18,8 @@ const productSchema = Schema(
     },
     inventoryStatus: { type: String, enum: ["out of stock", "available"] },
     price: { type: Number, require: true, default: 0, min: 0 },
+    tax: { type: Number, default: 10 },
+    shipping: { type: Number, default: 5 },
     priceSale: { type: Number, default: 0 },
     discount: { type: Number, default: 0 },
     quantity: { type: Number, require: true, min: 0 },

@@ -6,7 +6,7 @@ const TagSchema = Schema(
   {
     title: { type: String },
     slug: { type: String },
-    content: { type: String },
+
     isDeleted: { type: Boolean, default: false },
   },
   {

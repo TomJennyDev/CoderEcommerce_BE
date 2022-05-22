@@ -47,7 +47,7 @@ router.post(
 router.get(
   "/",
   validate(tokenVal.verifyToken, ["headers"]),
-  validate(userVal.getUsers, ["headers"]),
+  validate(userVal.getUsers, ["body"]),
   logginRequired,
   isAdmin,
   UserCtr.getAllUsersList

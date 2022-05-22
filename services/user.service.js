@@ -19,12 +19,13 @@ userService.checkEmailTaken = async function (filter) {
 };
 
 userService.getUserByFilter = async function (filter, options) {
-  const user = await User.findOne(filter, options);
+  const user = await User.findOne(filter, options).populate("cartId");
+
   return user;
 };
 
 userService.getUserById = async function (userId) {
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).populate("cartId");
   if (!user) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
@@ -37,6 +38,12 @@ userService.getUserById = async function (userId) {
 
 userService.getAllUsersList = async function (query) {
   // query.populate = "CreditCards."
+
+  if (query.name) {
+    query.name = { $regex: query.name, $options: "i" };
+  } else {
+    delete query.name;
+  }
   const users = await User.paginate(query);
   return users;
 };
@@ -66,7 +73,7 @@ userService.createUser = async function (userBody) {
 
 userService.updateUserById = async function (userId, userBody) {
   let user = await User.findById(userId);
-
+  console.log(user);
   if (!user) {
     throw new AppError(404, "User Not Found", "Update current User");
   }

@@ -1,45 +1,20 @@
 const httpStatus = require("http-status");
 const { sendResponse, catchAsync } = require("../helpers/utils");
+const dashboardService = require("../services/dashboard.services");
 
-const descriptionController = {};
+const dashboardController = {};
 
-descriptionController.getDescriptionById = catchAsync(
-  async (req, res, next) => {
-    return sendResponse(
-      res,
-      httpStatus.OK,
-      true,
-      Description,
-      "",
-      "User is login successfully"
-    );
-  }
-);
+dashboardController.getAllInfoDashboard = catchAsync(async (req, res, next) => {
+  const info = await dashboardService.GetAllInfoDashboard(req.query);
 
-descriptionController.updateDescriptionById = catchAsync(
-  async (req, res, next) => {
-    return sendResponse(
-      res,
-      httpStatus.OK,
-      true,
-      Description,
-      "",
-      "User is login successfully"
-    );
-  }
-);
+  return sendResponse(
+    res,
+    httpStatus.OK,
+    true,
+    info,
+    "",
+    "Get All information in Dashboard successfully"
+  );
+});
 
-descriptionController.deleteDescriptionById = catchAsync(
-  async (req, res, next) => {
-    return sendResponse(
-      res,
-      httpStatus.OK,
-      true,
-      {},
-      "",
-      "User is login successfully"
-    );
-  }
-);
-
-module.exports = descriptionController;
+module.exports = dashboardController;

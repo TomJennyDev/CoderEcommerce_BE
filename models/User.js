@@ -6,6 +6,7 @@ const paginate = require("./plugin/paginate.plugin");
 const config = require("../config/config");
 const toJSON = require("./plugin/toJSON.plugin");
 const creditCartSchema = require("./CreditCard");
+const autoPopulate = require("mongoose-autopopulate");
 
 const userSchema = Schema(
   {
@@ -28,15 +29,19 @@ const userSchema = Schema(
     googleId: {
       type: String,
       unique: true,
-      sparse: true,
     },
     facebookId: {
       type: String,
       unique: true,
-      sparse: true,
     },
     creditCards: [creditCartSchema],
-    cartId: { type: Schema.Types.ObjectId, ref: "Carts" },
+
+    cartId: {
+      type: Schema.Types.ObjectId,
+      ref: "Carts",
+      require: true,
+      unique: true,
+    },
     isResetPassword: { type: Boolean, default: false },
   },
   {
@@ -55,8 +60,6 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.generateToken = function () {
-  console.log("generateToken");
-
   const user = this;
 
   const accessToken = jwt.sign(
@@ -77,7 +80,6 @@ userSchema.methods.filterOutputUser = function () {
   delete obj.password;
   delete obj.isDeleted;
   delete obj.isEmailVerified;
-  delete obj.role;
   delete obj.createdAt;
   delete obj.updatedAt;
 

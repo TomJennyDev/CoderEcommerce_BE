@@ -1,9 +1,9 @@
 const httpStatus = require("http-status");
-const { Types } = require("mongoose");
+
 const { AppError, catchAsync } = require("../helpers/utils");
 const Cart = require("../models/Cart");
-const CartItem = require("../models/CartItem");
-const cartItemService = require("./CartItem.service");
+
+const cartItemService = require("./cartItem.service");
 
 const cartService = {};
 
@@ -18,12 +18,8 @@ cartService.getAllCarts = async function (query) {
   return carts;
 };
 
-cartService.getCartById = async function (userId, cartId, role) {
+cartService.getCartById = async function (userId) {
   let filter = { userId };
-
-  if (role === "admin") {
-    filter = { cartId };
-  }
 
   let cart = await Cart.findOne(filter);
 
@@ -43,10 +39,8 @@ cartService.getCartById = async function (userId, cartId, role) {
 };
 
 cartService.createCart = async function (userId) {
-  console.log(userId);
-
   let cart = await Cart.findOne({ userId });
-  console.log(cart);
+
   if (cart) {
     throw new AppError(404, "Cart is Exists", "Create cart");
   }
@@ -57,6 +51,7 @@ cartService.createCart = async function (userId) {
 };
 
 cartService.updateCartById = async function (userId, cartBody, cartId, role) {
+  delete cartBody._id;
   let cart = await Cart.findOne({ userId });
 
   if (!cart) {
@@ -68,6 +63,7 @@ cartService.updateCartById = async function (userId, cartBody, cartId, role) {
       cart[field] = cartBody[field];
     }
   });
+
   await cart.save();
   return cart;
 };

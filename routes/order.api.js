@@ -14,15 +14,23 @@ router.get(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   //   validate(orderVal.getAllordersPublic, ["body"]),
-  orderCtr.getAllOrders
+  orderCtr.getOrderByUser
 );
 
-router.get(
-  "/me/:id",
+router.post(
+  "/me/create",
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   //   validate(orderVal.getAllordersPublic, ["body"]),
-  orderCtr.getOrderById
+  orderCtr.createOrder
+);
+
+router.put(
+  "/me/update",
+  validate(tokenVal.verifyToken, ["headers"]),
+  logginRequired,
+  //   validate(orderVal.getAllordersPublic, ["body"]),
+  orderCtr.updateOrderById
 );
 
 //adminsitrators
@@ -31,7 +39,7 @@ router.get(
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,
-  orderCtr.getAllCategories
+  orderCtr.getAllOrders
 );
 
 router.get(
@@ -53,16 +61,7 @@ router.post(
 );
 
 router.put(
-  "/createsub/:id",
-  validate(tokenVal.verifyToken, ["headers"]),
-  logginRequired,
-  isAdmin,
-  //   validate(orderVal.updateorder, ["body"]),
-  orderCtr.createSubOrder
-);
-
-router.put(
-  "/update/:id",
+  "/update",
   validate(tokenVal.verifyToken, ["headers"]),
   logginRequired,
   isAdmin,

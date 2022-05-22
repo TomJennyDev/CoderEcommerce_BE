@@ -6,7 +6,7 @@ const productService = require("../services/product.service");
 const productController = {};
 
 productController.getAllProducts = catchAsync(async (req, res, next) => {
-  const products = await productService.getAllProducts(req.query);
+  const products = await productService.getAllProducts(req.query, req.user);
   return sendResponse(
     res,
     httpStatus.OK,

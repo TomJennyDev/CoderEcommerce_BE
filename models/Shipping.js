@@ -7,9 +7,11 @@ const shippingSchema = Schema(
     phone: { type: Number },
     city: { type: String },
     district: { type: String },
-    Ward: { type: String },
+    ward: { type: String },
     address1: { type: String },
     address2: { type: String },
+    deliveryTime: { type: Date },
+    method: { type: String, enum: [5, 7, 1] },
   },
   {
     timestamps: true, //CreatedAt & UpdatedAt

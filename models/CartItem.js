@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
+
 const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
-const toJSON = require("./plugin/toJSON.plugin");
 
 const cartItemSchema = Schema(
   {
@@ -13,9 +13,10 @@ const cartItemSchema = Schema(
     timestamps: true, //CreatedAt & UpdatedAt
   }
 );
-cartItemSchema.plugin(toJSON);
+
 cartItemSchema.plugin(paginate);
 
 cartItemSchema.index({ cartId: 1, productId: 1 }, { unique: true });
+
 const CartItem = mongoose.model("CartItems", cartItemSchema);
 module.exports = CartItem;

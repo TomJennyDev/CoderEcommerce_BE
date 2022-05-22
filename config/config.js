@@ -4,7 +4,7 @@ const env = process.env;
 
 const config = {
   mongoose: {
-    url: `${env.MONGO_DEV_URI}/${env.DB_NAME}`,
+    url: `${env.MONGO_PRODUCT_URI}/${env.DB_NAME}`,
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -13,6 +13,7 @@ const config = {
   email: {
     smtp: {
       service: "gmail",
+      secure: false,
       auth: {
         user: env.SMTP_USERNAME,
         pass: env.SMTP_PASSWORD,

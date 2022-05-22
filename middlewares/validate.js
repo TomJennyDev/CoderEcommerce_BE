@@ -22,7 +22,7 @@ validators.validate = (schema, locations) => async (req, res, next) => {
     });
     return next();
   }
-  console.log(errors.array());
+
   const message = errors
     .array()
     .map((error) => {

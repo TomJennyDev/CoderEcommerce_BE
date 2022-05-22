@@ -1,7 +1,10 @@
 const httpStatus = require("http-status");
 const { AppError, catchAsync } = require("../helpers/utils");
 const Order = require("../models/Order");
-
+const { Types } = require("mongoose");
+const CartItem = require("../models/CartItem");
+const { startSession } = require("mongoose");
+const Cart = require("../models/Cart");
 const orderService = {};
 
 orderService.checkExistOrder = async function (OrderId) {
@@ -10,9 +13,58 @@ orderService.checkExistOrder = async function (OrderId) {
 };
 
 orderService.getAllOrders = async function (query) {
+  query.populate = "userId";
+  query.sortBy = "createdAt.desc";
+
+  const { deliveryStart, deliveryEnd } = query;
+  console.log(deliveryStart, deliveryEnd);
+  if (deliveryStart) {
+    query["shipping.deliveryTime"] = { $gte: new Date(deliveryStart) };
+    delete query.deliveryStart;
+  } else if (deliveryStart && deliveryEnd) {
+    query["shipping.deliveryTime"] = {
+      $gte: new Date(deliveryStart),
+      $lte: new Date(new Date(deliveryEnd).setUTCHours(23, 59, 59, 999)),
+    };
+
+    delete query.deliveryStart;
+    delete query.deliveryEnd;
+  }
+
+  if (query?.status === "status" || !query?.status) {
+    delete query.status;
+  }
   const orders = await Order.paginate(query);
 
   return orders;
+};
+
+orderService.getOrderByUser = async function (userId, query) {
+  query.userId = userId;
+  query.sortBy = "createdAt.desc";
+
+  const { deliveryStart, deliveryEnd } = query;
+
+  if (deliveryStart) {
+    query.createdAt = {
+      $gte: new Date(deliveryStart),
+    };
+    delete query.deliveryStart;
+  } else if (deliveryStart && deliveryEnd) {
+    query.createdAt = {
+      $gte: new Date(deliveryStart),
+      $lte: new Date(new Date(deliveryEnd).setUTCHours(23, 59, 59, 999)),
+    };
+    delete query.deliveryStart;
+    delete query.deliveryEnd;
+  }
+
+  if (query?.status === "status" || !query?.status) {
+    delete query.status;
+  }
+  const order = await Order.paginate(query);
+
+  return order;
 };
 
 orderService.getOrderById = async function (orderId) {
@@ -28,25 +80,51 @@ orderService.getOrderById = async function (orderId) {
   return order;
 };
 
-orderService.createOrder = async function (orderBody) {
-  const order = await Order.create(orderBody);
+orderService.createOrder = async function (userId, orderBody) {
+  const session = await startSession();
 
-  return order;
+  let { cartId } = orderBody;
+
+  cartId = Types.ObjectId(cartId);
+
+  orderBody = { ...orderBody, userId, cartId };
+
+  try {
+    session.startTransaction();
+
+    const order = await Order.create([orderBody], { session });
+
+    await CartItem.deleteMany({ cartId }, { session });
+
+    await CartItem.countDocuments({ cartId }, { session });
+
+    const cart = await Cart.findByIdAndUpdate(
+      cartId,
+      { totalItem: 0 },
+      { session }
+    );
+
+    await session.commitTransaction();
+    return order;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
 };
 
-orderService.updateOrderById = async function (orderId, orderBody) {
-  let order = await Order.findById(orderId);
+orderService.updateOrderById = async function (orderBody) {
+  let { orderIds, status } = orderBody;
 
-  if (!order) {
+  orderIds = orderIds.map((e) => Types.ObjectId(e));
+
+  let order = await Order.find({ _id: { $in: orderIds } });
+
+  if (order.length !== orderIds.length) {
     throw new AppError(404, "Order Not Found", "Update order");
   }
 
-  Object.keys(orderBody).forEach((field) => {
-    if (orderBody[field] !== undefined) {
-      order[field] = orderBody[field];
-    }
-  });
-  return order;
+  await Order.updateMany({ _id: { $in: orderIds } }, { status });
 };
 
 orderService.deleteOrderById = async function (orderId) {

@@ -17,7 +17,6 @@ router.get(
 
 router.get(
   "/public/:id",
-
   //   validate(categoryVal.getAllcategorysPublic, ["body"]),
   categoryCtr.getCategoryById
 );

@@ -1,37 +1,46 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const paginate = require("./plugin/paginate.plugin");
-const config = require("../config/config");
-const creditCartSchema = require("./CreditCard");
+const shippingSchema = require("./Shipping");
+const paymentSchema = require("./Payment");
+const Product = require("./Product");
 
-const productSchema = Schema(
+const orderSchema = Schema(
   {
-    userId: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
-    email: { type: String, required: true },
-    phone: { type: Number },
-    city: { type: String },
-    district: { type: String },
-    ward: { type: String },
-    address1: { type: String },
-    address2: { type: String },
-    status: { type: String, enum: ["pending", "shipping", "complete"] },
-    isDeleted: { type: Boolean, default: false },
-    total: { type: Boolean, default: 0, required: true },
-    tax: { type: Boolean, default: 0, required: true },
-    payment: {
-      type: String,
+    userId: {
+      type: Schema.Types.ObjectId,
       required: true,
-      enum: ["creditCards", "Cash", "BankOnline"],
+      ref: "Users",
     },
-    creditCards: [creditCartSchema],
-    products: [Product],
+    cartId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Carts",
+    },
+    isCustomerUpdated: { type: Boolean, default: false },
+    shipping: shippingSchema,
+    payment: paymentSchema,
+    status: {
+      type: String,
+      enum: ["pending", "delivered", "refunded", "cancel"],
+      default: "pending",
+    },
+    products: [
+      {
+        productId: [Product.schema],
+        quantity: { type: Number },
+        createdAt: { type: Date },
+        updatedAt: { type: Date },
+      },
+    ],
+    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
   }
 );
 
-productSchema.plugin(paginate);
+orderSchema.plugin(paginate);
 
-const Product = mongoose.model("Products", productSchema);
-module.exports = Product;
+const Order = mongoose.model("Orders", orderSchema);
+module.exports = Order;

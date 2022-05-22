@@ -3,9 +3,18 @@ const { Types } = require("mongoose");
 const { AppError } = require("../helpers/utils");
 const Cart = require("../models/Cart");
 const CartItem = require("../models/CartItem");
+
 const productService = require("./product.service");
 
 const cartItemService = {};
+
+cartItemService.calTotalItem = async function (cartId) {
+  let totalItem = await CartItem.countDocuments({ cartId });
+  const cart = await Cart.findOne({ _id: cartId });
+  cart.totalItem = totalItem;
+  cart.save();
+  return totalItem;
+};
 
 cartItemService.getAllCartItemByCartId = async function (cartId) {
   let query = { cartId, populate: "productId", select: "-_id -cartId" };
@@ -16,7 +25,8 @@ cartItemService.getAllCartItemByCartId = async function (cartId) {
 };
 
 cartItemService.updateCartItem = async function (userId, cartItemBody) {
-  const { productId, operator } = cartItemBody;
+  const { productId, action } = cartItemBody;
+  let totalItem = 0;
 
   const cart = await Cart.findOne({ userId });
   if (!cart) {
@@ -39,18 +49,21 @@ cartItemService.updateCartItem = async function (userId, cartItemBody) {
 
   let cartitem = await CartItem.findOne({ cartId: cart._id, productId });
 
-  if (operator && cartitem) {
-    operator === "+" ? (cartitem.quantity += 1) : (cartitem.quantity -= 1);
+  if (cartitem) {
+    action ? (cartitem.quantity += 1) : (cartitem.quantity -= 1);
 
     await cartitem.save();
-    return;
+    totalItem = await cartItemService.calTotalItem(cart._id);
   }
 
   if (!cartitem) {
     cartitem = { cartId: cart._id, productId, quantity: 1 };
 
     await CartItem.create(cartitem);
+    totalItem = await cartItemService.calTotalItem(cart._id);
   }
+
+  return totalItem;
 };
 
 cartItemService.deleteCartItem = async function (userId, cartItemBody) {
@@ -84,6 +97,8 @@ cartItemService.deleteCartItem = async function (userId, cartItemBody) {
     cartId: cart._id,
     productId: { $in: arrProductId },
   });
+  const totalItem = await cartItemService.calTotalItem(cart._id);
+  return totalItem;
 };
 
 module.exports = cartItemService;
