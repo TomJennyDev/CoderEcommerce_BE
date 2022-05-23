@@ -13,7 +13,6 @@ const config = {
   email: {
     smtp: {
       service: "gmail",
-      secure: false,
       auth: {
         user: env.SMTP_USERNAME,
         pass: env.SMTP_PASSWORD,

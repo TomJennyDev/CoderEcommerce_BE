@@ -22,6 +22,14 @@ authService.loginUserWithEmailPassword = async function (email, password) {
     );
   }
 
+  if (user.isDeleted) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "please contact to Admin",
+      "Authentication error"
+    );
+  }
+
   if (!user) {
     throw new AppError(
       httpStatus.UNAUTHORIZED,

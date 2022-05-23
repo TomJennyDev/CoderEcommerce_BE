@@ -1,9 +1,9 @@
 // const Category = require("./models/Category");
 // const { createCategory } = require("./services/category.service");
-const fs = require("fs");
-const Category = require("./models/Category");
-const Product = require("./models/Product");
-const productService = require("./services/product.service");
+// const fs = require("fs");
+// const Category = require("./models/Category");
+// const Product = require("./models/Product");
+// const productService = require("./services/product.service");
 
 // // categories
 // const catogories = [
@@ -143,7 +143,7 @@ const productService = require("./services/product.service");
 //   { title: "huawei" },
 //   { title: "huawei" },
 // ];
-// (async () => await Product.deleteMany({}))();
+// (async () => await Category.deleteMany({}))();
 
 // let data = fs.readFileSync("./final/smartwatch.json", "utf8");
 // res = JSON.parse(data);
