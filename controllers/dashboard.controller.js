@@ -1,6 +1,6 @@
 const httpStatus = require("http-status");
 const { sendResponse, catchAsync } = require("../helpers/utils");
-const dashboardService = require("../services/dashboard.services");
+const dashboardService = require("../services/dashboard.service");
 
 const dashboardController = {};
 

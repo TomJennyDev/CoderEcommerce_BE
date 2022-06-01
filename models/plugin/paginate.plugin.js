@@ -13,7 +13,7 @@ const paginate = (schema) => {
 
       sort = sortingCriteria.join(" ");
     } else {
-      sort = "createdAt";
+      sort = "-createdAt";
     }
 
     limit = limit && parseInt(limit, 10) > 0 ? parseInt(limit, 10) : 9;

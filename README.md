@@ -2,13 +2,11 @@
 
 ## Description
 
-A social platform web application built with MERN stack. This is the codebase for the MongoDB NodeJS and Express RESTful backend API.
-
-This is the solution for the full-stack web dev course @CoderSchoolVn
+An ecommerce platform web application built with MERN stack. This is the codebase for the MongoDB NodeJS and Express RESTful backend API.
 
 ## Features
 
-This include all common features of a Social Platform.
+This include all common features of a Coder Ecommerce Platform.
 
 ### User authentication and managing account (UserFlow)
 
@@ -18,7 +16,6 @@ This include all common features of a Social Platform.
 4. Owner can see own user's information
 5. Owner can update own account profile
 6. Owner can deactivate own account
-
 7. Admin can see a list of all users
 8. Admin can see detail information of all Users
 9. Admin can update information of all Users
@@ -31,7 +28,7 @@ This include all common features of a Social Platform.
 2. User can filter product by (search by name, category, keywords).
 3. User can see detail information of single product.
 4. Admin can add a product.
-5. Admin can add discription(HTML/CSS) for product.
+5. Admin can add description(HTML/CSS) for product.
 6. Admin can update information of a product.
 7. Admin can deactive a product.
 
@@ -75,10 +72,6 @@ This include all common features of a Social Platform.
 2. When we access detail product, we can see some of meta data will show at the top of head tag HTML.
 
 ## Production API
-
-- [Doc](https://app.swaggerhub.com/apis-docs/dhminh1024/CoderComm/1.0.0#/Reaction/createReaction)
-
-- [App demo](https://codercomm-dot-cs-platform-306304.et.r.appspot.com/)
 
 ## Project setup
 
