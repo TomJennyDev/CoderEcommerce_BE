@@ -1,4 +1,4 @@
-# social-platform-mongo-express
+# # coder-ecommerce-mongo-express
 
 ## Description
 
@@ -86,8 +86,7 @@ This include all common features of a Coder Ecommerce Platform.
 2. Install project dependencies
 
    ```console
-   npm i nodemon cors bcryptjs dotenv
-   npm i jsonwebtoken mongoose
+   npm install
    ```
 
 3. Add dev script

@@ -5,6 +5,7 @@ const { Types } = require("mongoose");
 const CartItem = require("../models/CartItem");
 const { startSession } = require("mongoose");
 const Cart = require("../models/Cart");
+const Product = require("../models/Product");
 const orderService = {};
 
 orderService.checkExistOrder = async function (OrderId) {
@@ -17,7 +18,7 @@ orderService.getAllOrders = async function (query) {
   query.sortBy = "createdAt.desc";
 
   const { deliveryStart, deliveryEnd } = query;
-  console.log(deliveryStart, deliveryEnd);
+
   if (deliveryStart) {
     query["shipping.deliveryTime"] = { $gte: new Date(deliveryStart) };
     delete query.deliveryStart;

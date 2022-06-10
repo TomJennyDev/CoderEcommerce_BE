@@ -4,7 +4,6 @@ const {
   generateRandomHexString,
   catchAsync,
 } = require("../helpers/utils");
-const cartService = require("./cart.service");
 const userService = require("./user.service");
 
 const authService = {};

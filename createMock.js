@@ -31,6 +31,6 @@ const productService = require("./services/product.service");
 //   });
 // })();
 
-(async () => {
-  await Order.deleteMany();
-})();
+// (async () => {
+//   await Order.deleteMany();
+// })();

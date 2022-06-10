@@ -1,6 +1,3 @@
-const httpStatus = require("http-status");
-const { AppError, catchAsync } = require("../helpers/utils");
-
 const User = require("../models/User");
 const Order = require("../models/Order");
 const Product = require("../models/Product");

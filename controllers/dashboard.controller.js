@@ -6,7 +6,6 @@ const dashboardController = {};
 
 dashboardController.getAllInfoDashboard = catchAsync(async (req, res, next) => {
   const info = await dashboardService.GetAllInfoDashboard(req.query);
-
   return sendResponse(
     res,
     httpStatus.OK,
